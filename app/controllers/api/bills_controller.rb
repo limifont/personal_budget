@@ -1,7 +1,7 @@
 class Api::BillsController < ApplicationController
 
 	before_action :bill, except: :index
-	
+
   def index
   	render json: Bill.all
   end
