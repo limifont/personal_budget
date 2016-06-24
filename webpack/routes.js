@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router';
 import App from './containers/App';
 import NoMatch from './components/NoMatch';
-
+import Bills from './component/Bills';
 
 export default (
   <Route>
