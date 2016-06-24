@@ -40,7 +40,9 @@ class Bills extends React.Component {
 		})
 
 		return(
-			<h3>{bills}</h3>
+			<div className='row'>
+				<h3>{bills}</h3>
+			</div>
 		)
 	}
 }
