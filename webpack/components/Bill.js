@@ -10,12 +10,13 @@ class Bill extends React.Component {
 
   componentWillMount() {
    $.ajax({
-    url: '/api/bills/${this.props.params.id}',
+    url: `/api/bills/${this.props.params.id}`,
     type: 'GET',
     dataType: 'JSON'
    }).done( bill => {
     this.setState({ bill })
    }).fail( data => {
+    debugger
     console.log(data);
    })     
   }
