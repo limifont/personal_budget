@@ -1,6 +1,6 @@
 class Api::BillsController < ApplicationController
 
-	before_action :bill, except: :index
+	before_action :bill, except: [:index, :create]
 
   def index
   	render json: Bill.all
@@ -8,6 +8,17 @@ class Api::BillsController < ApplicationController
 
   def show
     render json: @bill
+  end
+
+  def create 
+  	@bill = Bill.create(bill_params)
+
+  	if @bill
+  		render json: @bill
+  	else
+  		render json: {errors: @bill.errors.full_messages}
+  	end
+
   end
 
   def update
