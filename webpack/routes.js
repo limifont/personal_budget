@@ -3,7 +3,7 @@ import { Route, IndexRoute } from 'react-router';
 import App from './containers/App';
 import NoMatch from './components/NoMatch';
 import Bills from './components/Bills';
-import Bill from './component/Bill';
+import Bill from './components/Bill';
 
 export default (
   <Route>
