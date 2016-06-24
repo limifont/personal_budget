@@ -29,7 +29,7 @@ class Bill extends React.Component {
     e.preventDefault();
     let name = this.refs.name.value;
     let amount = this.refs.amount.value;
-    let categroy = this.refs.categroy.value;
+    let category = this.refs.category.value;
     let due_date = this.refs.dueDate.value;
 
     $.ajax({
