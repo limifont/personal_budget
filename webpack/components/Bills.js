@@ -15,19 +15,21 @@ class Bills extends React.Component {
 			dataType: 'JSON'
 		}).done ( bills => {
 			this.setState({ bills });
-   		console.log(this.state.bills)
 		}).fail (data => {
 			console.log(data);
 		})
 	      
 	}
 
-	AddNewBill() {
-
+	addNewBill(e) {
+		e.preventDefault();
+		debugger
 		let name = this.refs.name.value;
 		let amount = this.refs.amount.value;
 		let due_date = this.refs.dueDate.value;
-		let category = this.refs.options.value;
+		let category = this.refs.category.value;
+		debugger
+
 		console.log('hello');
 		$.ajax({
 			url: `/api/bills`,
@@ -35,7 +37,7 @@ class Bills extends React.Component {
 			data: { bill: {name, amount, category, due_date } },
 			dataType: 'JSON'
 		}).done( bill => { 
-
+			debugger
 			this.setState({
 				bills: [ {...bill}, ...this.state.bills ]
 			});
@@ -43,7 +45,6 @@ class Bills extends React.Component {
 			this.refs.addBill.reset();
 
 		}).fail( data => {
-				debugger
 			console.log(data);
 		});
 	}
@@ -67,19 +68,12 @@ class Bills extends React.Component {
 
 		return(
 			<div>
-				<form className="container" ref="addBill" onSubmit={() => this.AddNewBill.bind(this)}>
+				<form className="container" ref="addBill" onSubmit={this.addNewBill.bind(this)}>
 	        <input ref="name" placeholder="Name" required={true}  />
 	        <input ref="amount" placeholder="Amount" type="number"/>
 	        <input ref="dueDate" placeholder="Due Date" type="date"/>
-	        <div class="input-field col s12">
-            <select ref="options" className='browser-default' id="addForm">
-              <option value="" disabled selected>Choose a category</option>
-              <option value="1">Home</option>
-              <option value="2">transportation</option>
-              <option value="3">Health</option>
-              </select>
-           </div>
-	        <button type="submit" className="btn">Add</button>
+	        <input ref="category" placeholder="Category" type="text"/>
+	        <input type="submit" className="btn"/>
 	      </form>
 				<div className='row'>
 					<h3>{bills}</h3>
