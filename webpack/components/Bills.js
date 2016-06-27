@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 class Bills extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { bills: [], expenses: 0, food: 0, home: 0, health: 0, recreation: 0, transportation: 0 }
+		this.state = { bills: [], expenses: 0, food: 0, home: 0, health: 0, recreation: 0, transportation: 0, other: 0, allBills: false }
 		this.totalExpenses = this.totalExpenses.bind(this);
 	}
 
@@ -75,26 +75,41 @@ class Bills extends React.Component {
 	render() {
 		let bills = this.state.bills.map( bill => {
 			return(
-				<div key={`bill-${bill.id}`} className="col s12 m6">
-          <div className="card blue-grey darken-1">
-            <div className="card-content white-text">
-              <span className="card-title">{bill.name}</span>
-              <p>{bill.amount}</p>
-            </div>
-            <div className="card-action">
-            	<Link to={`/bills/${bill.id}`}>Show</Link>
-            </div>
-          </div>
-        </div>
+				<div className="container">
+					<div key={`bill-${bill.id}`} className="col s12 m6">
+	          <div className="card blue-grey darken-1">
+	            <div className="card-content white-text">
+	              <span className="card-title">{bill.name}</span>
+	              <p>{bill.amount}</p>
+	            </div>
+	            <div className="card-action">
+	            	<Link to={`/bills/${bill.id}`}>Show</Link>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
 			)
 		})
 
 		return(
 			<div>
-				<div className="center">
-					<p>Your total expenses are: </p>
-					<p>${this.state.expenses}</p>
-					<p>Food: ${this.state.food}, Home: ${this.state.home}, Health: ${this.state.health}, Recreation: ${this.state.recreation}, Transportation: ${this.state.transportation}</p>
+				<div className="container">
+					<div className="center">
+						<p>Your total expenses are: </p>
+						<p>${this.state.expenses}</p>
+						<div className="row">
+							<button className="btn col s12 m6">Food: ${this.state.food}</button>
+							<button className="btn col s12 m6">Home: ${this.state.home}</button>
+						</div>
+						<div className="row">
+							<button className="btn col s12 m6">Health: ${this.state.health}</button>
+							<button className="btn col s12 m6">Recreation: ${this.state.recreation}</button>
+						</div>
+						<div className="row">
+							<button className="btn col s12 m6">Transportation: ${this.state.transportation}</button>
+							<button className="btn col s12 m6">Other: ${this.state.other}</button>
+						</div>
+					</div>
 				</div>
 				<form className="container" ref="addBill" onSubmit={this.addNewBill.bind(this)}>
 	        <input ref="name" placeholder="Name" required={true}  />
