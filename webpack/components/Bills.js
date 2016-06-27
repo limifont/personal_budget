@@ -21,14 +21,34 @@ class Bills extends React.Component {
 	      
 	}
 
+	deleteBill(id) {
+		console.log(id);
+
+		$.ajax({
+			url: `/api/bills/${id}`,
+			type: 'DELETE',
+			dataType: 'JSON'
+		}).done ( bill => {
+			let bills = this.state.bills;
+			let index = bills.findIndex(x => x.id === id);
+			this.setState({
+				bills: [
+					...bills.slice(0, index),
+					...bills.slice(index + 1, bills.length )
+				]
+			});
+
+		}).fail (data => {
+			console.log(data);
+		})
+	}
+
 	addNewBill(e) {
 		e.preventDefault();
-		debugger
 		let name = this.refs.name.value;
 		let amount = this.refs.amount.value;
 		let due_date = this.refs.dueDate.value;
 		let category = this.refs.category.value;
-		debugger
 
 		console.log('hello');
 		$.ajax({
@@ -37,7 +57,7 @@ class Bills extends React.Component {
 			data: { bill: {name, amount, category, due_date } },
 			dataType: 'JSON'
 		}).done( bill => { 
-			debugger
+
 			this.setState({
 				bills: [ {...bill}, ...this.state.bills ]
 			});
@@ -49,6 +69,10 @@ class Bills extends React.Component {
 		});
 	}
 
+	showResult(value){
+		console.log(value);
+	}
+
 	render() {
 		let bills = this.state.bills.map( bill => {
 			return(
@@ -57,9 +81,11 @@ class Bills extends React.Component {
             <div className="card-content white-text">
               <span className="card-title">{bill.name}</span>
               <p>{bill.amount}</p>
+              <p>{bill.category}</p>
             </div>
             <div className="card-action">
             	<Link to={`/bills/${bill.id}`}>Show</Link>
+            	<button className="btn red" onClick={() => this.deleteBill(bill.id)}>Delete</button>
             </div>
           </div>
         </div>
@@ -68,6 +94,11 @@ class Bills extends React.Component {
 
 		return(
 			<div>
+				<form>
+					<input type="text" size="30" placeholder="Search Bills" onkeyup="showResult(this.value)" />
+					<div id="livesearch"></div>
+				</form>
+				<br/>
 				<form className="container" ref="addBill" onSubmit={this.addNewBill.bind(this)}>
 	        <input ref="name" placeholder="Name" required={true}  />
 	        <input ref="amount" placeholder="Amount" type="number"/>
