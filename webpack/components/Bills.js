@@ -4,7 +4,8 @@ import { Link } from 'react-router';
 class Bills extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { bills: [], expenses: 0 }
+		this.state = { bills: [], expenses: 0, food: 0, home: 0, health: 0, recreation: 0, transportation: 0 }
+		this.totalExpenses = this.totalExpenses.bind(this);
 	}
 
 	componentWillMount() {
@@ -13,11 +14,37 @@ class Bills extends React.Component {
 			url: `/api/bills`,
 			type: 'GET',
 			dataType: 'JSON'
-		}).done ( bills => {
-			this.setState({ bills });
-		}).fail (data => {
+		}).done( bills => {
+			this.setState({ bills })
+			let expenses = this.totalExpenses();
+			this.setState( expenses );
+		}).fail(data => {
 			console.log(data);
-		})	      
+		})      
+	}
+
+	totalExpenses() {
+		let expenses = 0;
+		let health = 0;
+		let home = 0;
+		let recreation = 0;
+		let transportation = 0;
+		let food = 0;
+		this.state.bills.map( bill => {
+			expenses += bill.amount;
+			if(bill.category === 'Health'){
+				health += bill.amount;
+			} else if(bill.category === 'Home'){
+				home += bill.amount;
+			} else if(bill.category === 'Recreation'){
+				recreation += bill.amount;
+			} else if(bill.category === 'Transportation'){
+				transportation += bill.amount;
+			} else if(bill.category === 'Food'){
+				food += bill.amount;
+			}
+		})
+		return { expenses, health, home, recreation, transportation, food };
 	}
 
 
@@ -28,7 +55,6 @@ class Bills extends React.Component {
 		let due_date = this.refs.dueDate.value;
 		let category = this.refs.category.value;
 
-		console.log('hello');
 		$.ajax({
 			url: `/api/bills`,
 			type: 'POST',
@@ -38,9 +64,9 @@ class Bills extends React.Component {
 			this.setState({
 				bills: [ {...bill}, ...this.state.bills ]
 			});
-
+			let expenses = this.totalExpenses();
+			this.setState( expenses );
 			this.refs.addBill.reset();
-
 		}).fail( data => {
 			console.log(data);
 		});
@@ -65,7 +91,11 @@ class Bills extends React.Component {
 
 		return(
 			<div>
-				{expenses}
+				<div className="center">
+					<p>Your total expenses are: </p>
+					<p>${this.state.expenses}</p>
+					<p>Food: ${this.state.food}, Home: ${this.state.home}, Health: ${this.state.health}, Recreation: ${this.state.recreation}, Transportation: ${this.state.transportation}</p>
+				</div>
 				<form className="container" ref="addBill" onSubmit={this.addNewBill.bind(this)}>
 	        <input ref="name" placeholder="Name" required={true}  />
 	        <input ref="amount" placeholder="Amount" type="number"/>
