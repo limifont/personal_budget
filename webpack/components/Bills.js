@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 class Bills extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { bills: [] }
+		this.state = { bills: [], expenses: 0 }
 	}
 
 	componentWillMount() {
@@ -17,18 +17,16 @@ class Bills extends React.Component {
 			this.setState({ bills });
 		}).fail (data => {
 			console.log(data);
-		})
-	      
+		})	      
 	}
+
 
 	addNewBill(e) {
 		e.preventDefault();
-		debugger
 		let name = this.refs.name.value;
 		let amount = this.refs.amount.value;
 		let due_date = this.refs.dueDate.value;
 		let category = this.refs.category.value;
-		debugger
 
 		console.log('hello');
 		$.ajax({
@@ -37,7 +35,6 @@ class Bills extends React.Component {
 			data: { bill: {name, amount, category, due_date } },
 			dataType: 'JSON'
 		}).done( bill => { 
-			debugger
 			this.setState({
 				bills: [ {...bill}, ...this.state.bills ]
 			});
@@ -68,6 +65,7 @@ class Bills extends React.Component {
 
 		return(
 			<div>
+				{expenses}
 				<form className="container" ref="addBill" onSubmit={this.addNewBill.bind(this)}>
 	        <input ref="name" placeholder="Name" required={true}  />
 	        <input ref="amount" placeholder="Amount" type="number"/>
